@@ -17,8 +17,10 @@
   }
   .grid-container {
     display: grid;
-    grid-template-columns: repeat(3, 230px);
-    grid-row-gap: 50px;
+    --column-count: 3;
+    grid-template-columns: repeat(var(--column-count), 1fr);
+    --column-row-gap: 50px;
+    grid-row-gap: var(--column-row-gap);
     grid-column-gap: 20px;
     justify-content: center;
     align-content: start;
@@ -39,7 +41,6 @@
     vertical-align: middle;
     border: 1px solid #c0c0c0;
     font-size: 34px;
-    /* font-weight: bold; */
   }
   .time-label {
     text-align: center;
@@ -64,7 +65,8 @@
       page-break-before: always;
     }
     .grid-container {
-      padding-top: 50px;
+      --grid-container-top-print: 50px;
+      padding-top: var(--grid-container-top-print);
     }
     .no-print {
       display: none;
@@ -74,9 +76,16 @@
 </head>
 <body>
   <div class="no-print prompt">
-    <div>输入表格的边长: <input type="number" value="4" id="input-grid-width"/></div>
+    <div>请选择表格样式：
+      <select id="input-grid-width">
+        <option value="3">3*3</option>
+        <option value="4" selected>4*4</option>
+        <option value="5">5*5</option>
+    </select>
+    </div>
     <div>输入生成的页数: <input type="number" value="1" id="input-page-count"/></div>
-    <button onclick="createSchulteGrid()">点击生成表格，可以打印（打印机或者PDF）</button>
+    <button onclick="createSchulteGrid()">生成表格</button>
+    <button onclick="print2()">打印 / 保存PDF</button>
   </div>
   <div id="page-container"></div>
 
@@ -99,18 +108,26 @@
     pageContainer.innerHTML = '' // 清除所有表格
     const pageCount = document.getElementById('input-page-count').value;
     const rowNum = document.getElementById('input-grid-width').value;
+    let gridColCount = 3; // 列
+    if (rowNum > 4) {
+      gridColCount = 2;
+    }
+    let gridRowCount = 3; // 行
+    let gridRowGap = '50px';
+    if (rowNum > 4) {
+      gridRowGap = '20px';
+    }
+    let printTopPadding = '50px';
+    if (rowNum > 4) {
+      printTopPadding = '20px'
+    }
     for (let p = 0; p < pageCount; p++) {
       const gridContainer = document.createElement('div')
       gridContainer.className = 'grid-container'
-      let colPerPage = 3;
-      if (rowNum <= 3) {
-        colPerPage = 4;
-      } else if (rowNum == 6) {
-        colPerPage = 2;
-      } else if (rowNum > 6) {
-        colPerPage = 1;
-      }
-      for (let i = 0; i < 3 * colPerPage; i++) {
+      gridContainer.style.setProperty('--column-count', gridColCount);
+      gridContainer.style.setProperty('--column-row-gap', gridRowGap);
+      gridContainer.style.setProperty('--grid-container-top-print', printTopPadding)
+      for (let i = 0; i < gridRowCount * gridColCount; i++) {
         const gridItem = document.createElement('div');
         gridItem.className = 'grid-item';
         const timeLabel = document.createElement('div');
@@ -135,13 +152,17 @@
         gridItem.appendChild(table);
         gridContainer.appendChild(gridItem);
       }
-      if (p < pageCount) { // 添加分割线
+      if (p < pageCount - 1) { // 添加分割线
         const pageBreak = document.createElement('div')
         pageBreak.className = "page-break"
         gridContainer.appendChild(pageBreak)
       }
       pageContainer.appendChild(gridContainer)
     }
+  }
+
+  function print2() {
+    window.print();
   }
 
 </script>

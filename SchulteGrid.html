@@ -48,10 +48,8 @@
   }
   .prompt {
     text-align: center;
-    margin-top: 50px;
+    margin-top: 20px;
     margin-bottom: 50px;
-    margin-left: 500px;
-    margin-right: 500px;
   }
   input {
     margin: 5px;
@@ -85,7 +83,7 @@
     </div>
     <div>输入生成的页数: <input type="number" value="1" id="input-page-count"/></div>
     <button onclick="createSchulteGrid()">生成表格</button>
-    <button onclick="print2()">打印 / 保存PDF</button>
+    <div style="color: dimgray; font-size: 12px;">生成表格后可打印，选择打印机或另存为PDF</div>
   </div>
   <div id="page-container"></div>
 
@@ -159,10 +157,6 @@
       }
       pageContainer.appendChild(gridContainer)
     }
-  }
-
-  function print2() {
-    window.print();
   }
 
 </script>

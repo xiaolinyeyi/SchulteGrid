@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>舒尔特方格生成器</title>
+<title>舒尔特方格生成器（打印）</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
 <style>
   body {
     margin: 0;
-    padding: 0;
+    padding-top: 50px;
     justify-content: center;
     height: 100vh;
     background-color: #f7f7f7;
@@ -58,6 +58,10 @@
     margin: 5px;
   }
   @media print {
+    @page {
+      size: auto;
+      margin: 0mm;
+    }
     .page-break {
       display: block;
       page-break-before: always;
